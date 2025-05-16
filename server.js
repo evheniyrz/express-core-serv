@@ -14,7 +14,7 @@ app
     res.setHeader(
       "Access-Control-Allow-Origin",
       process.env.DEV_MODE === "true"
-        ? `http://localHost:${PORT}`
+        ? `${req.headers.origin}`
         : `https://evheniyrz.github.io`
     );
     res.setHeader("Access-Control-Allow-Methods", "POST,GET,PUT,OPTIONS,HEAD");
