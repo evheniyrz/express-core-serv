@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const axios = require("axios");
 const bodyParser = require("body-parser");
+require("dotenv").config();
 
 const app = express();
 const PORT = 3000;
@@ -10,7 +11,12 @@ const PORT = 3000;
 app
   .use(cors())
   .use(function (req, res, next) {
-    res.setHeader("Access-Control-Allow-Origin", `https://evheniyrz.github.io`);
+    res.setHeader(
+      "Access-Control-Allow-Origin",
+      process.env.DEV_MODE === "true"
+        ? `http://localHost:${PORT}`
+        : `https://evheniyrz.github.io`
+    );
     res.setHeader("Access-Control-Allow-Methods", "POST,GET,PUT,OPTIONS,HEAD");
     res.setHeader(
       "Access-Control-Allow-Headers",
@@ -26,12 +32,12 @@ app
 app.get("/geo", async (req, res) => {
   try {
     const response = await axios.get("https://iplocate.io/api/lookup", {
-      params: { ...req.query, api_key: "b441794f8e447b5ea124387614a42910" },
+      params: { ...req.query, api_key: process.env.GEO_API_ACCESS },
     });
 
     res.json(response.data);
   } catch (error) {
-    res.status(error.status).json({ error: "Ошибка получения данных" });
+    res.status(error.status).json(...error);
   }
 });
 
@@ -46,7 +52,7 @@ app.get("/countries/:name", async (req, res) => {
     );
     res.json(response.data);
   } catch (error) {
-    res.status(error.status).json({ error: "Ошибка получения данных" });
+    res.status(error.status).json(...error);
   }
 });
 // Маршрут для получения списка стран https://countriesnow.space/api/v0.1/countries/cities
@@ -61,7 +67,7 @@ app.post("/cities", async (req, res) => {
     res.json(response.data);
   } catch (error) {
     console.log("ERROR=CITY", error);
-    res.status(error.status).json({ error, msg: "Ошибка получения данных" });
+    res.status(error.status).json(...error);
   }
 });
 
@@ -71,7 +77,7 @@ app.get("/weather", async (req, res) => {
     const response = await axios.get(
       `https://api.openweathermap.org/data/2.5/weather`,
       {
-        params: { ...req.query, appid: "f2f367b6802fb926387ec43c28c57846" },
+        params: { ...req.query, appid: process.env.OPEN_WEATHER_ACCESS },
       }
     );
     res.json(response.data);
@@ -85,12 +91,12 @@ app.get("/forecast", async (req, res) => {
     const response = await axios.get(
       `https://api.openweathermap.org/data/2.5/forecast`,
       {
-        params: { ...req.query, appid: "f2f367b6802fb926387ec43c28c57846" },
+        params: { ...req.query, appid: process.env.OPEN_WEATHER_ACCESS },
       }
     );
     res.json(response.data);
   } catch (error) {
-    res.status(error.status).json({ error, msg: "Ошибка получения данных" });
+    res.status(error.status).json(...error);
   }
 });
 
