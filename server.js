@@ -31,7 +31,7 @@ app.get("/geo", async (req, res) => {
 
     res.json(response.data);
   } catch (error) {
-    res.status(500).json({ error: "Ошибка получения данных" });
+    res.status(error.status).json({ error: "Ошибка получения данных" });
   }
 });
 
@@ -46,7 +46,7 @@ app.get("/countries/:name", async (req, res) => {
     );
     res.json(response.data);
   } catch (error) {
-    res.status(500).json({ error: "Ошибка получения данных" });
+    res.status(error.status).json({ error: "Ошибка получения данных" });
   }
 });
 // Маршрут для получения списка стран https://countriesnow.space/api/v0.1/countries/cities
@@ -61,7 +61,7 @@ app.post("/cities", async (req, res) => {
     res.json(response.data);
   } catch (error) {
     console.log("ERROR=CITY", error);
-    res.status(500).json({ error, msg: "Ошибка получения данных" });
+    res.status(error.status).json({ error, msg: "Ошибка получения данных" });
   }
 });
 
@@ -76,7 +76,7 @@ app.get("/weather", async (req, res) => {
     );
     res.json(response.data);
   } catch (error) {
-    res.status(500).json({ error, ms: "Ошибка получения данных" });
+    res.status(error.status).json({ error, ms: "Ошибка получения данных" });
   }
 });
 app.get("/forecast", async (req, res) => {
@@ -90,7 +90,7 @@ app.get("/forecast", async (req, res) => {
     );
     res.json(response.data);
   } catch (error) {
-    res.status(500).json({ error, msg: "Ошибка получения данных" });
+    res.status(error.status).json({ error, msg: "Ошибка получения данных" });
   }
 });
 
