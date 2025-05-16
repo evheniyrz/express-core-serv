@@ -23,6 +23,20 @@ app
       "X-Requested-With,content-type"
     );
     res.setHeader("Access-Control-Allow-Credentials", true);
+    res.set({
+      // prevent page rendering in <iframe>, <object>, <frame>
+      "X-Frame-Options": "SAMEORIGIN",
+      // only valid parents that may embed a page using <frame>, * <iframe>, <object>, <embed>, or <applet>.
+      "Content-Security-Policy": `frame-ancestors 'self' https://evheniyrz.github.io;`,
+      // lets a web site tell browsers that it should only be requested via HTTPS. Protects against man-in-the-middle attacks.
+      // param 'preload' adding site to HSTS list.
+      "Strict-Transport-Security":
+        "max-age=31536000; includeSubDomains; preload",
+      // indicates that MIME types declared in the Content-Type headers should be respected and not changed by server.
+      "X-Content-Type-Options": "nosniff",
+      // If cross-site scripting (XSS) is detected, the browser will delete insecure content.
+      "X-XSS-Protection": 1,
+    });
     next();
   })
   .use(bodyParser.urlencoded({ extended: false }))
