@@ -10,10 +10,7 @@ const PORT = 3000;
 app
   .use(cors())
   .use(function (req, res, next) {
-    res.setHeader(
-      "Access-Control-Allow-Origin",
-      `https://evheniyrz.github.io/`
-    );
+    res.setHeader("Access-Control-Allow-Origin", `https://evheniyrz.github.io`);
     res.setHeader("Access-Control-Allow-Methods", "POST,GET,PUT,OPTIONS,HEAD");
     res.setHeader(
       "Access-Control-Allow-Headers",
