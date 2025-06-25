@@ -22,12 +22,12 @@ app
       "Access-Control-Allow-Headers",
       "X-Requested-With,content-type"
     );
-    res.setHeader("Access-Control-Allow-Credentials", true);
+    res.setHeader("Access-Control-Allow-Credentials", "true");
     res.set({
       // prevent page rendering in <iframe>, <object>, <frame>
       "X-Frame-Options": "SAMEORIGIN",
       // only valid parents that may embed a page using <frame>, * <iframe>, <object>, <embed>, or <applet>.
-      "Content-Security-Policy": `frame-ancestors 'self' https://evheniyrz.github.io;`,
+      "Content-Security-Policy": `default-src 'self'; object-src 'none'; frame-ancestors 'self' https://evheniyrz.github.io; script-src 'self' https://evheniyrz.github.io;`,
       // lets a web site tell browsers that it should only be requested via HTTPS. Protects against man-in-the-middle attacks.
       // param 'preload' adding site to HSTS list.
       "Strict-Transport-Security":
@@ -51,7 +51,7 @@ app.get("/geo", async (req, res) => {
 
     res.json(response.data);
   } catch (error) {
-    res.status(error.status).json(...error);
+    res.status(error.status).json(error);
   }
 });
 
@@ -66,10 +66,10 @@ app.get("/countries/:name", async (req, res) => {
     );
     res.json(response.data);
   } catch (error) {
-    res.status(error.status).json(...error);
+    res.status(error.status).json(error);
   }
 });
-// Маршрут для получения списка стран https://countriesnow.space/api/v0.1/countries/cities
+// Маршрут для получения списка городов https://countriesnow.space/api/v0.1/countries/cities
 app.post("/cities", async (req, res) => {
   try {
     const response = await axios.post(
@@ -81,7 +81,7 @@ app.post("/cities", async (req, res) => {
     res.json(response.data);
   } catch (error) {
     console.log("ERROR=CITY", error);
-    res.status(error.status).json(...error);
+    res.status(error.status).json(error);
   }
 });
 
@@ -110,7 +110,7 @@ app.get("/forecast", async (req, res) => {
     );
     res.json(response.data);
   } catch (error) {
-    res.status(error.status).json(...error);
+    res.status(error.status).json(error);
   }
 });
 
