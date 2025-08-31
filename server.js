@@ -2,14 +2,22 @@ const express = require("express");
 const cors = require("cors");
 const axios = require("axios");
 const bodyParser = require("body-parser");
+const rateLimit = require("express-rate-limit");
+
 require("dotenv").config();
 
 const app = express();
 const PORT = 3000;
+const limiter = rateLimit({
+  windowMs: 2 * 60 * 1000,
+  max: 50,
+  message: "Слишком много запросов с этого IP, попробуйте позже",
+});
 
-// Включаем CORS
+// Enable CORS
 app
   .use(cors())
+  .use(limiter)
   .use(function (req, res, next) {
     res.setHeader(
       "Access-Control-Allow-Origin",
@@ -42,7 +50,7 @@ app
   .use(bodyParser.urlencoded({ extended: false }))
   .use(bodyParser.json());
 /**================================================================ */
-// Маршрут для получения геолокации https://iplocate.io/api/lookup
+// Rout t get geo-location https://iplocate.io/api/lookup
 app.get("/geo", async (req, res) => {
   try {
     const response = await axios.get("https://iplocate.io/api/lookup", {
@@ -55,7 +63,7 @@ app.get("/geo", async (req, res) => {
   }
 });
 
-// Маршрут для получения списка стран https://restcountries.com/v3.1/name
+// List of countries https://restcountries.com/v3.1/name
 app.get("/countries/:name", async (req, res) => {
   try {
     const response = await axios.get(
@@ -69,7 +77,7 @@ app.get("/countries/:name", async (req, res) => {
     res.status(error.status).json(error);
   }
 });
-// Маршрут для получения списка городов https://countriesnow.space/api/v0.1/countries/cities
+// List of cities https://countriesnow.space/api/v0.1/countries/cities
 app.post("/cities", async (req, res) => {
   try {
     const response = await axios.post(
@@ -85,7 +93,7 @@ app.post("/cities", async (req, res) => {
   }
 });
 
-// Маршрут для получения данных о погоде (пример для города "London")https://api.openweathermap.org/data/2.5
+// Forecast data (for example - city "London")https://api.openweathermap.org/data/2.5
 app.get("/weather", async (req, res) => {
   try {
     const response = await axios.get(
@@ -114,7 +122,7 @@ app.get("/forecast", async (req, res) => {
   }
 });
 
-// Запуск сервера
+// Enable server
 app.listen(PORT, () => {
   console.log(`CORS сервер запущен на порту ${PORT}`);
 });
